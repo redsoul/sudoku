@@ -1,0 +1,21 @@
+<div class="board-controller-container">
+    <div id="board-wrapper">
+        <div id="board">
+            <div class="row" ng-repeat="row in hintBoard track by $index">
+                <span class="square"
+                      ng-repeat="square in row track by $index" 
+                      ng-class="{
+                        'square-border-vertical-left': $index%3==0,
+                        'square-border-vertical-right': $index%3==2,
+                        'square-border-horizontal-left': $parent.$index%3==0,
+                        'square-border-horizontal-right': $parent.$index%3==2,
+                        'hint-square': square != null,
+                        'selected': isSelected($parent.$index, $index)
+                        }"
+                      ng-click="selectSquare($parent.$index, $index)"
+                      ng-bind-template="{{(square != null) ? square : userBoard[$parent.$index][$index]}}">
+                    </span>
+            </div>
+        </div>
+    </div>
+</div>

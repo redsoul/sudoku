@@ -1,0 +1,26 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "express": "3.5.1",
+    "ejs": "*",
+    "less-middleware": "*",
+    "grunt": "^0.4.4",
+    "karma": "^0.12.0",
+    "karma-coverage": "^0.1.4",
+    "grunt-karma": "^0.8.2",
+    "grunt-istanbul-coverage": "^0.0.2",
+    "jshint-stylish": "^1.0.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "karma-phantomjs-launcher": "^0.1.1",
+    "karma-chrome-launcher": "^0.1.2",
+    "karma-jasmine": "^0.2.2",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-express-server": "^0.4.19"
+  }
+}
