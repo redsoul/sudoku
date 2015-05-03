@@ -8,8 +8,8 @@ angular.module('Sudoku').factory('SolverService', [
 
         function checkRow(row, value) {
             var index;
-            for(index=0; index<board[row].length; index++){
-                if(board[row][index] === value){
+            for (index = 0; index < board[row].length; index++) {
+                if (board[row][index] === value) {
                     return false;
                 }
             }
@@ -18,8 +18,8 @@ angular.module('Sudoku').factory('SolverService', [
 
         function checkColumn(column, value) {
             var index;
-            for(index=0; index<board.length; index++){
-                if(board[index][column] === value){
+            for (index = 0; index < board.length; index++) {
+                if (board[index][column] === value) {
                     return false;
                 }
             }
@@ -28,19 +28,30 @@ angular.module('Sudoku').factory('SolverService', [
 
         function checkSection(row, column, value) {
             // Save the upper left corner
-            var columnCorner = 0,
-                rowCorner = 0,
-                squareSize = 3;
+            var columnCorner = 0;
+            var rowCorner = 0;
+            var squareSize = 3;
+            var indexR;
+            var indexC;
 
             // Find the left-most column
-            while(column >= columnCorner + squareSize) {
+            while (column >= columnCorner + squareSize) {
                 columnCorner += squareSize;
             }
 
             // Find the upper-most row
-            while(row >= rowCorner + squareSize) {
+            while (row >= rowCorner + squareSize) {
                 rowCorner += squareSize;
             }
+
+            for(indexR=rowCorner; indexR<=rowCorner + squareSize; indexR++){
+                for(indexC=columnCorner; indexC<=columnCorner + squareSize; indexC++){
+                    if (board[indexR][indexC] === value) {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         function checkValue(row, column, value) {
@@ -91,26 +102,26 @@ angular.module('Sudoku').factory('SolverService', [
 
             //fill the first column
             _shuffleValues();
-            for (indexC = 0; indexC < board.length; indexC++) {
-                board[0][indexC] = _randNumber(indexC);
+            for (indexR = 0; indexR < board.length; indexR++) {
+                board[0][indexR] = _randNumber(indexR);
             }
 
-            for (indexC = 1; indexC <= board.length; indexC++) {
+            for (indexC = 0; indexC <= board.length; indexC++) {
                 _shuffleValues();
-                for (indexR = 0; indexR <= board.length; indexR++) {
-
+                for (indexR = 1; indexR <= board.length; indexR++) {
+                    found = false;
                     while (!found && inc < limit) {
                         value = _randNumber(inc);
+                        console.log(indexR, indexC, value);
                         if (checkValue(indexR, indexC, value)) {
                             board[indexR][indexC] = value;
                             found = true;
                         }
-                        else {
-                            inc++;
-                        }
+                        inc++;
                     }
                 }
             }
+            debugger;
         }
 
         return {
