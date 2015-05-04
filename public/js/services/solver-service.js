@@ -3,8 +3,17 @@ angular.module('Sudoku').factory('SolverService', [
     function () {
         'use strict';
 
-        var board = angular.array2D(9, 9);
-        var legalNums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        var board;
+        var legalNums;
+
+        function init() {
+            board = angular.array2D(9, 9);
+            initLegalNums();
+        }
+
+        function initLegalNums() {
+            legalNums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        }
 
         function checkRow(row, value) {
             var index;
@@ -44,8 +53,8 @@ angular.module('Sudoku').factory('SolverService', [
                 rowCorner += squareSize;
             }
 
-            for(indexR=rowCorner; indexR<=rowCorner + squareSize; indexR++){
-                for(indexC=columnCorner; indexC<=columnCorner + squareSize; indexC++){
+            for (indexR = rowCorner; indexR < rowCorner + squareSize; indexR++) {
+                for (indexC = columnCorner; indexC < columnCorner + squareSize; indexC++) {
                     if (board[indexR][indexC] === value) {
                         return false;
                     }
@@ -68,6 +77,7 @@ angular.module('Sudoku').factory('SolverService', [
             var rand;
             var index = 0;
             var shuffled = [];
+
             angular.forEach(obj, function (value) {
                 rand = _random(index++);
                 shuffled[index - 1] = shuffled[rand];
@@ -84,21 +94,33 @@ angular.module('Sudoku').factory('SolverService', [
             return min + Math.floor(Math.random() * (max - min + 1));
         }
 
-        function _shuffleValues() {
+        function _shuffleValues(obj) {
+            if (obj) {
+                legalNums = obj;
+            }
+            else {
+                initLegalNums();
+            }
+
             legalNums = _shuffle(legalNums);
         }
 
-        function _randNumber(index) {
-            return legalNums[index];
+        function _randNumber() {
+            return legalNums.pop();
+        }
+
+        function setBoardValue(row, column, value) {
+            board[row][column] = value
         }
 
         function createPuzzle() {
             var indexC;
             var indexR;
-            var inc = 0;
+            var inc;
             var limit = board.length;
             var value = 1;
             var found = false;
+            var attempts = 0;
 
             //fill the first column
             _shuffleValues();
@@ -106,16 +128,34 @@ angular.module('Sudoku').factory('SolverService', [
                 board[0][indexR] = _randNumber(indexR);
             }
 
-            for (indexC = 0; indexC <= board.length; indexC++) {
+            debugger;
+            for (indexR = 1; indexR < board.length; indexR++) {
                 _shuffleValues();
-                for (indexR = 1; indexR <= board.length; indexR++) {
+                inc = 0;
+                for (indexC = 0; indexC < board[indexR].length; indexC++) {
                     found = false;
+                    attempts = 0;
+                    debugger;
                     while (!found && inc < limit) {
-                        value = _randNumber(inc);
-                        console.log(indexR, indexC, value);
+                        value = _randNumber();
+
                         if (checkValue(indexR, indexC, value)) {
                             board[indexR][indexC] = value;
                             found = true;
+                            inc++;
+                        }
+                        else {
+                            debugger;
+                            legalNums.push(value);
+                            _shuffleValues(legalNums);
+                            attempts++;
+                        }
+
+                        if (attempts >= 3 && indexC>0) {
+                            indexC--;
+                            inc--;
+                            attempts = 0;
+                            legalNums.push(value);
                         }
                         inc++;
                     }
@@ -124,8 +164,19 @@ angular.module('Sudoku').factory('SolverService', [
             debugger;
         }
 
+        init();
+
         return {
-            createPuzzle: createPuzzle
+            init: init,
+            setBoardValue: setBoardValue,
+            checkRow: checkRow,
+            checkColumn: checkColumn,
+            checkSection: checkSection,
+            checkValue: checkValue,
+            createPuzzle: createPuzzle,
+            getBoard: function () {
+                return board;
+            }
         };
     }
 
