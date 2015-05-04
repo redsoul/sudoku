@@ -146,7 +146,7 @@ angular.module('Sudoku').factory('SolverService', [
                         }
                         else {
                             debugger;
-                            legalNums.push(value);
+                            legalNums.unshift(value);
                             _shuffleValues(legalNums);
                             attempts++;
                         }
@@ -155,7 +155,7 @@ angular.module('Sudoku').factory('SolverService', [
                             indexC--;
                             inc--;
                             attempts = 0;
-                            legalNums.push(value);
+                            legalNums.unshift(value);
                         }
                         inc++;
                     }

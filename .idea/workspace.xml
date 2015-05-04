@@ -46,8 +46,8 @@
       <file leaf-file-name="solver-service.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/js/services/solver-service.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.80742776">
-              <caret line="157" column="50" selection-start-line="157" selection-start-column="50" selection-end-line="157" selection-end-column="50" />
+            <state vertical-scroll-proportion="0.6217331">
+              <caret line="148" column="45" selection-start-line="148" selection-start-column="45" selection-end-line="148" selection-end-column="45" />
               <folding>
                 <element signature="e#671#911#0" expanded="false" />
               </folding>
@@ -893,8 +893,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/js/services/solver-service.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.80742776">
-          <caret line="157" column="50" selection-start-line="157" selection-start-column="50" selection-end-line="157" selection-end-column="50" />
+        <state vertical-scroll-proportion="0.6217331">
+          <caret line="148" column="45" selection-start-line="148" selection-start-column="45" selection-end-line="148" selection-end-column="45" />
           <folding>
             <element signature="e#671#911#0" expanded="false" />
           </folding>
