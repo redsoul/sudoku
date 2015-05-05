@@ -132,6 +132,7 @@ angular.module('Sudoku').factory('SolverService', [
             for (indexR = 1; indexR < board.length; indexR++) {
                 _shuffleValues();
                 inc = 0;
+                debugger;
                 for (indexC = 0; indexC < board[indexR].length; indexC++) {
                     found = false;
                     attempts = 0;
@@ -145,17 +146,16 @@ angular.module('Sudoku').factory('SolverService', [
                             inc++;
                         }
                         else {
-                            debugger;
                             legalNums.unshift(value);
                             _shuffleValues(legalNums);
                             attempts++;
                         }
 
-                        if (attempts >= 3 && indexC>0) {
+                        if (attempts > 3 && indexC > 0) {
+                            delete board[indexR][indexC - 1];
                             indexC--;
                             inc--;
                             attempts = 0;
-                            legalNums.unshift(value);
                         }
                         inc++;
                     }
