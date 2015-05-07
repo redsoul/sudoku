@@ -151,11 +151,21 @@ angular.module('Sudoku').factory('SolverService', [
                             attempts++;
                         }
 
-                        if (attempts > 3 && indexC > 0) {
-                            delete board[indexR][indexC - 1];
+                        if (attempts > 0 && attempts >= legalNums.length) {
                             indexC--;
                             inc--;
                             attempts = 0;
+
+                            if (indexC < 0) {
+                                indexC = board[indexR].length - 1;
+                                indexR--;
+                                inc = 0;
+                            }
+
+                            legalNums.unshift(board[indexR][indexC]);
+                            delete board[indexR][indexC];
+                            found = true;
+                            indexC--;
                         }
                         inc++;
                     }
