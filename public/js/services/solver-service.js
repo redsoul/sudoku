@@ -113,6 +113,20 @@ angular.module('Sudoku').factory('SolverService', [
             board[row][column] = value
         }
 
+        function getEmptySquares(targetBoard){
+            var indexC;
+            var indexR;
+            var emptySquares = [];
+            for (indexR = 0; indexR < targetBoard.length; indexR++) {
+                for (indexC = 0; indexC < targetBoard[indexR].length; indexC++) {
+                    if(angular.isUndefined(targetBoard[indexR][indexC])){
+                        emptySquares.push([indexR, indexC]);
+                    }
+                }
+            }
+            return emptySquares;
+        }
+
         function createPuzzle() {
             var indexC;
             var indexR;
@@ -121,6 +135,10 @@ angular.module('Sudoku').factory('SolverService', [
             var value = 1;
             var found = false;
             var attempts = 0;
+            var squareAttempts;
+            var columnCorner = 0;
+            var squareSize = 3;
+            var index;
 
             //fill the first column
             _shuffleValues();
@@ -128,15 +146,14 @@ angular.module('Sudoku').factory('SolverService', [
                 board[0][indexR] = _randNumber(indexR);
             }
 
-            debugger;
             for (indexR = 1; indexR < board.length; indexR++) {
                 _shuffleValues();
                 inc = 0;
-                debugger;
+                squareAttempts = 0;
                 for (indexC = 0; indexC < board[indexR].length; indexC++) {
                     found = false;
                     attempts = 0;
-                    debugger;
+                    columnCorner = 0;
                     while (!found && inc < limit) {
                         value = _randNumber();
 
@@ -147,25 +164,41 @@ angular.module('Sudoku').factory('SolverService', [
                         }
                         else {
                             legalNums.unshift(value);
-                            _shuffleValues(legalNums);
                             attempts++;
-                        }
 
-                        if (attempts > 0 && attempts >= legalNums.length) {
-                            indexC--;
-                            inc--;
-                            attempts = 0;
+                            if (attempts > 0 && attempts >= legalNums.length) {
+                                // Find the left-most column
+                                if (squareAttempts < 3) {
+                                    while (indexC >= columnCorner + squareSize) {
+                                        columnCorner += squareSize;
+                                    }
+                                }
+                                else {
+                                    columnCorner = 0;
+                                    squareAttempts = 0;
+                                }
 
-                            if (indexC < 0) {
-                                indexC = board[indexR].length - 1;
-                                indexR--;
-                                inc = 0;
+
+                                for (index = indexC; index >= columnCorner; index--) {
+                                    indexC = 8 - legalNums.length;
+                                    inc--;
+                                    attempts = 0;
+
+                                    if (indexC < 0) {
+                                        indexC = board[indexR].length - 1;
+                                        indexR--;
+                                        inc = 0;
+                                    }
+
+                                    legalNums.unshift(board[indexR][indexC]);
+                                    delete board[indexR][indexC];
+                                }
+
+                                _shuffleValues(legalNums);
+                                found = true;
+                                indexC = indexC > 0 ? indexC - 1 : 0;
+                                squareAttempts++;
                             }
-
-                            legalNums.unshift(board[indexR][indexC]);
-                            delete board[indexR][indexC];
-                            found = true;
-                            indexC--;
                         }
                         inc++;
                     }
