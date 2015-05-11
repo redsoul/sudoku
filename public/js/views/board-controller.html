@@ -1,9 +1,10 @@
-<div class="board-controller-container">
-    <div id="board-wrapper">
-        <div id="board">
-            <div class="row" ng-repeat="row in hintBoard track by $index">
+<div class="board-container">
+    <div class="board-row">
+        <div ng-controller="BoardController" class="board-wrapper">
+            <div id="board">
+                <div class="row" ng-repeat="row in hintBoard track by $index">
                 <span class="square"
-                      ng-repeat="square in row track by $index" 
+                      ng-repeat="square in row track by $index"
                       ng-class="{
                         'square-border-vertical-left': $index%3==0,
                         'square-border-vertical-right': $index%3==2,
@@ -15,7 +16,12 @@
                       ng-click="selectSquare($parent.$index, $index)"
                       ng-bind-template="{{(square != null) ? square : userBoard[$parent.$index][$index]}}">
                     </span>
+                </div>
             </div>
+        </div>
+
+        <div class="stats-container">
+            <ng-include src="'/js/views/stats-controller.html'"></ng-include>
         </div>
     </div>
 </div>

@@ -1,16 +1,15 @@
-angular.module('Sudoku').controller('BoardController', ['$scope', '$rootScope',
+angular.module('Sudoku').controller('BoardController', ['$scope', '$rootScope', 'BoardService',
 
-    function ($scope, $rootScope) {
+    function ($scope, $rootScope, BoardService) {
         'use strict';
 
-        //var boardModel = BoardService.getBoard();
         var selected = [];
 
         $rootScope.loggingEnabled = false;
-        $scope.hintBoard = angular.array2D(9, 9);
-        $scope.hintBoard[4][4]=1;
+        $scope.hintBoard = BoardService.getHintBoard();
         $scope.userBoard = angular.array2D(9, 9);
-        $scope.userBoard[3][3]=2;
+
+        BoardService.initBoard();
 
         function reset(){
         }

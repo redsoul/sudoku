@@ -26,8 +26,6 @@ describe("SolverService - ", function () {
             SolverService.setBoardValue(0, 3, 4);
             SolverService.setBoardValue(0, 4, 5);
             SolverService.setBoardValue(0, 5, 6);
-
-            //BoardService.printBoard(SolverService.getBoard());
         });
 
         it("Check 3X3 square", function () {
@@ -51,9 +49,40 @@ describe("SolverService - ", function () {
             SolverService.init();
         });
 
-        it("", function () {
-            SolverService.createPuzzle();
-            BoardService.printBoard(SolverService.getBoard());
+        function countPuzzleHints(board) {
+            var indexR;
+            var indexC;
+            var count = 0;
+
+            for (indexR = 0; indexR < board.length; indexR++) {
+                for (indexC = 0; indexC < board[indexR].length; indexC++) {
+                    if (angular.isNumber(board[indexR][indexC])) {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+
+        it("create puzzle - extreme mode", function () {
+            SolverService.createPuzzle(configs.gameMode.extreme);
+            expect(countPuzzleHints(SolverService.getBoard())).toBe(configs.gameMode.extreme);
+        });
+
+        it("create puzzle - hard mode", function () {
+            SolverService.createPuzzle(configs.gameMode.hard);
+            expect(countPuzzleHints(SolverService.getBoard())).toBe(configs.gameMode.hard);
+        });
+
+        it("create puzzle - medium mode", function () {
+            SolverService.createPuzzle(configs.gameMode.medium);
+            expect(countPuzzleHints(SolverService.getBoard())).toBe(configs.gameMode.medium);
+        });
+
+        it("create puzzle - extreme mode", function () {
+            SolverService.createPuzzle(configs.gameMode.extreme);
+            expect(countPuzzleHints(SolverService.getBoard())).toBe(configs.gameMode.extreme);
         });
     });
 });

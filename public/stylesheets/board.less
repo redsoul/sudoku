@@ -1,35 +1,49 @@
 
-#board {
-  width: 576px;
+.board-container {
+  display: table;
   margin: 50px auto;
-  overflow: auto;
-  clear: both;
 
-  .square {
-    border: 2px solid #cccccc;
-    width: 60px;
-    height: 60px;
-    float: left;
-    line-height: 60px;
-    font-size: 30px;
-    text-align: center;
+  .board-row {
+    display: table-row;
+
+    .board-wrapper {
+      width: 576px;
+      margin:0px 20px;
+      display: table-cell;
+
+      .square {
+        border: 2px solid #cccccc;
+        width: 60px;
+        height: 60px;
+        float: left;
+        line-height: 60px;
+        font-size: 30px;
+        text-align: center;
+      }
+      .hint-square {
+        background-color: #aaaaaa;
+      }
+      .square-border-vertical-left {
+        border-left: 2px solid black;
+      }
+      .square-border-vertical-right {
+        border-right: 2px solid black;
+      }
+      .square-border-horizontal-left {
+        border-top: 2px solid black;
+      }
+      .square-border-horizontal-right {
+        border-bottom: 2px solid black;
+      }
+      .selected {
+        border: 2px solid red;
+      }
+    }
+
+    .stats-wrapper {
+      width: 150px;
+      display: table-cell;
+    }
   }
-  .hint-square {
-    background-color: #aaaaaa;
-  }
-  .square-border-vertical-left {
-    border-left: 2px solid black;
-  }
-  .square-border-vertical-right {
-    border-right: 2px solid black;
-  }
-  .square-border-horizontal-left {
-    border-top: 2px solid black;
-  }
-  .square-border-horizontal-right {
-    border-bottom: 2px solid black;
-  }
-  .selected {
-    border: 2px solid red;
-  }
+
 }

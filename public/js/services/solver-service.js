@@ -1,6 +1,6 @@
-angular.module('Sudoku').factory('SolverService', [
+angular.module('Sudoku').factory('SolverService', ['$rootScope',
 
-    function () {
+    function ($rootScope) {
         'use strict';
 
         var board;
@@ -12,7 +12,7 @@ angular.module('Sudoku').factory('SolverService', [
         }
 
         function initLegalNums() {
-            legalNums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+            legalNums = configs.legalNumbers.clone();
         }
 
         function checkRow(row, value) {
@@ -113,13 +113,13 @@ angular.module('Sudoku').factory('SolverService', [
             board[row][column] = value
         }
 
-        function getEmptySquares(targetBoard){
+        function getEmptySquares(targetBoard) {
             var indexC;
             var indexR;
             var emptySquares = [];
             for (indexR = 0; indexR < targetBoard.length; indexR++) {
                 for (indexC = 0; indexC < targetBoard[indexR].length; indexC++) {
-                    if(angular.isUndefined(targetBoard[indexR][indexC])){
+                    if (angular.isUndefined(targetBoard[indexR][indexC])) {
                         emptySquares.push([indexR, indexC]);
                     }
                 }
@@ -127,84 +127,89 @@ angular.module('Sudoku').factory('SolverService', [
             return emptySquares;
         }
 
-        function createPuzzle() {
-            var indexC;
-            var indexR;
+        function _createPuzzle() {
             var inc;
             var limit = board.length;
             var value = 1;
             var found = false;
             var attempts = 0;
-            var squareAttempts;
-            var columnCorner = 0;
-            var squareSize = 3;
             var index;
+            var breakpoint = 0;
+            var attemptIndex;
+            var emptySquares;
+            var square;
+            var row;
+            var column;
 
             //fill the first column
             _shuffleValues();
-            for (indexR = 0; indexR < board.length; indexR++) {
-                board[0][indexR] = _randNumber(indexR);
+            for (row = 0; row < board.length; row++) {
+                board[0][row] = _randNumber();
             }
 
-            for (indexR = 1; indexR < board.length; indexR++) {
+            emptySquares = getEmptySquares(board);
+
+            for (index = 0; index < emptySquares.length;) {
+                square = emptySquares[index];
+                row = square[0];
+                column = square[1];
                 _shuffleValues();
+                value = _randNumber();
+                found = false;
                 inc = 0;
-                squareAttempts = 0;
-                for (indexC = 0; indexC < board[indexR].length; indexC++) {
-                    found = false;
+                attempts = Math.min(attempts, limit);
+
+                if (index > breakpoint) {
                     attempts = 0;
-                    columnCorner = 0;
-                    while (!found && inc < limit) {
-                        value = _randNumber();
+                }
 
-                        if (checkValue(indexR, indexC, value)) {
-                            board[indexR][indexC] = value;
-                            found = true;
-                            inc++;
-                        }
-                        else {
-                            legalNums.unshift(value);
-                            attempts++;
-
-                            if (attempts > 0 && attempts >= legalNums.length) {
-                                // Find the left-most column
-                                if (squareAttempts < 3) {
-                                    while (indexC >= columnCorner + squareSize) {
-                                        columnCorner += squareSize;
-                                    }
-                                }
-                                else {
-                                    columnCorner = 0;
-                                    squareAttempts = 0;
-                                }
-
-
-                                for (index = indexC; index >= columnCorner; index--) {
-                                    indexC = 8 - legalNums.length;
-                                    inc--;
-                                    attempts = 0;
-
-                                    if (indexC < 0) {
-                                        indexC = board[indexR].length - 1;
-                                        indexR--;
-                                        inc = 0;
-                                    }
-
-                                    legalNums.unshift(board[indexR][indexC]);
-                                    delete board[indexR][indexC];
-                                }
-
-                                _shuffleValues(legalNums);
-                                found = true;
-                                indexC = indexC > 0 ? indexC - 1 : 0;
-                                squareAttempts++;
-                            }
-                        }
+                while (!found && inc < limit) {
+                    if (checkValue(row, column, value)) {
+                        board[row][column] = value;
+                        found = true;
+                        index++
+                    }
+                    else {
                         inc++;
+                        value = _randNumber();
+                    }
+                }
+
+                if (!found) {
+                    if (attempts === 0) {
+                        breakpoint = index;
+                    }
+
+                    attempts++;
+                    for (attemptIndex = 0; attemptIndex < attempts; attemptIndex++) {
+                        if (index > 0) {
+                            index--;
+                            delete board[emptySquares[index][0]][emptySquares[index][1]];
+                        }
                     }
                 }
             }
-            debugger;
+        }
+
+        function _createEmptySquares(num) {
+            var index;
+            var row;
+            var column;
+
+            for (index = 0; index < num;) {
+                row = _random(0, 8);
+                column = _random(0, 8);
+                if (!angular.isUndefined(board[row][column])) {
+                    delete board[row][column];
+                    index++
+                }
+            }
+        }
+
+        function createPuzzle(mode) {
+            _createPuzzle();
+            _createEmptySquares(configs.totalSquares - mode);
+            //$rootScope.$broadcast(configs.events.boardUpdate);
         }
 
         init();

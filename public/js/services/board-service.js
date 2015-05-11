@@ -5,10 +5,14 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
 
         var hintBoard;
         var userBoard;
+        var legalNumbersCounter=[];
 
         function initBoard() {
+            var index;
+
             hintBoard = SolverService.getBoard();
             userBoard = angular.array2D(9, 9);
+            createPuzzle();
         }
 
         function getHintBoard() {
@@ -46,13 +50,37 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
             console.log(line);
         }
 
-        initBoard();
+        function createPuzzle(){
+            SolverService.createPuzzle(configs.gameMode.extreme);
+            hintBoard = SolverService.getBoard();
+        }
+
+        $rootScope.$on(configs.events.boardUpdate, function () {
+            var indexR;
+            var indexC;
+            var index;
+
+            for (index = 0; index < configs.legalNumbers.length; index++) {
+                legalNumbersCounter[configs.legalNumbers[index]] = 0;
+            }
+
+            for (indexR = 0; indexR < hintBoard.length; indexR++) {
+                for (indexC = 0; indexC < hintBoard[indexR].length; indexC++) {
+                    if (angular.isNumber(hintBoard[indexR][indexC])) {
+                        legalNumbersCounter[hintBoard[indexR][indexC]]++;
+                    }
+                }
+            }
+        });
 
         return {
             initBoard: initBoard,
             printBoard: printBoard,
             getHintBoard: getHintBoard,
-            getUserBoard: getUserBoard
+            getUserBoard: getUserBoard,
+            getLegalNumbersCounter: function(){
+                return legalNumbersCounter;
+            }
         };
     }
 ]);
