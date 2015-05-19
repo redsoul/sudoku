@@ -4,8 +4,8 @@ angular.module('Sudoku', ['ngRoute', 'ngCookies'])
             'use strict';
 
             $routeProvider.when("/", {
-                templateUrl: '/js/views/board-controller.html',
-                controller: 'BoardController'
+                templateUrl: '/js/views/game-controller.html',
+                controller: 'GameController'
             }).otherwise({
                 redirectTo: "/"
             });

@@ -3,10 +3,6 @@ angular.module('Sudoku').controller('StatsController', ['$scope', '$rootScope', 
     function ($scope, $rootScope, BoardService) {
         'use strict';
 
-
-        $scope.hintBoard = BoardService.getHintBoard();
-        $scope.userBoard = angular.array2D(9, 9);
-
         $scope.legalNumbersCounter = BoardService.getLegalNumbersCounter();
     }
 ]);

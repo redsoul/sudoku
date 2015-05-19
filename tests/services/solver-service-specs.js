@@ -3,10 +3,12 @@ describe("SolverService - ", function () {
 
     var SolverService;
     var BoardService;
+    var $scope;
 
     //mock Application to allow us to inject our own dependencies
     beforeEach(angular.mock.module('Sudoku'));
     beforeEach(angular.mock.inject(function ($rootScope, _SolverService_, _BoardService_) {
+        $scope = $rootScope;
         SolverService = _SolverService_;
         BoardService = _BoardService_;
     }));
@@ -47,6 +49,7 @@ describe("SolverService - ", function () {
     describe("createPuzzle function - ", function () {
         beforeEach(function () {
             SolverService.init();
+            spyOn($scope, '$broadcast').andCallFake(function(){return;});
         });
 
         function countPuzzleHints(board) {
@@ -83,6 +86,16 @@ describe("SolverService - ", function () {
         it("create puzzle - extreme mode", function () {
             SolverService.createPuzzle(configs.gameMode.extreme);
             expect(countPuzzleHints(SolverService.getBoard())).toBe(configs.gameMode.extreme);
+        });
+    });
+
+    describe("createEmptySquares function - ", function () {
+        beforeEach(function () {
+            SolverService.init();
+        });
+
+        it("create puzzle - extreme mode", function () {
+
         });
     });
 });

@@ -1,18 +1,19 @@
 angular.module('Sudoku').factory('SolverService', ['$rootScope',
 
+
     function ($rootScope) {
         'use strict';
 
         var board;
-        var legalNums;
+        var legalNumbers;
 
         function init() {
             board = angular.array2D(9, 9);
-            initLegalNums();
+            initLegalNumbers();
         }
 
-        function initLegalNums() {
-            legalNums = configs.legalNumbers.clone();
+        function initLegalNumbers() {
+            legalNumbers = configs.legalNumbers.clone();
         }
 
         function checkRow(row, value) {
@@ -87,7 +88,10 @@ angular.module('Sudoku').factory('SolverService', ['$rootScope',
         }
 
         function _random(min, max) {
-            if (max == null) {
+            if(min === null){
+                throw "_random - required min parameter";
+            }
+            if (angular.isUndefined(max)) {
                 max = min;
                 min = 0;
             }
@@ -96,17 +100,17 @@ angular.module('Sudoku').factory('SolverService', ['$rootScope',
 
         function _shuffleValues(obj) {
             if (obj) {
-                legalNums = obj;
+                legalNumbers = obj;
             }
             else {
-                initLegalNums();
+                initLegalNumbers();
             }
 
-            legalNums = _shuffle(legalNums);
+            legalNumbers = _shuffle(legalNumbers);
         }
 
         function _randNumber() {
-            return legalNums.pop();
+            return legalNumbers.pop();
         }
 
         function setBoardValue(row, column, value) {
@@ -191,7 +195,7 @@ angular.module('Sudoku').factory('SolverService', ['$rootScope',
             }
         }
 
-        function _createEmptySquares(num) {
+        function createEmptySquares(num) {
             var index;
             var row;
             var column;
@@ -199,34 +203,44 @@ angular.module('Sudoku').factory('SolverService', ['$rootScope',
             for (index = 0; index < num;) {
                 row = _random(0, 8);
                 column = _random(0, 8);
+                console.log(index, row, column, board[row][column]);
                 if (!angular.isUndefined(board[row][column])) {
-                    delete board[row][column];
-                    index++
+                    board[row][column] = undefined;
+                    index++;
+                }
+                else{
+                    debugger;
                 }
             }
+            console.log('--------------------');
         }
 
         function createPuzzle(mode) {
             _createPuzzle();
-            _createEmptySquares(configs.totalSquares - mode);
-            //$rootScope.$broadcast(configs.events.boardUpdate);
+            //console.log('_createPuzzle', board);
+            createEmptySquares(configs.totalSquares - mode);
+            //createEmptySquares(4);
+            //console.log('createEmptySquares', board);
+            $rootScope.$broadcast(configs.events.boardUpdate);
         }
 
         init();
 
         return {
             init: init,
+            setBoard: function(_board){
+                board = _board;
+            },
             setBoardValue: setBoardValue,
             checkRow: checkRow,
             checkColumn: checkColumn,
             checkSection: checkSection,
             checkValue: checkValue,
             createPuzzle: createPuzzle,
+            createEmptySquares: createEmptySquares,
             getBoard: function () {
                 return board;
             }
         };
     }
-
-])
-;
+]);
