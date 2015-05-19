@@ -217,10 +217,7 @@ angular.module('Sudoku').factory('SolverService', ['$rootScope',
 
         function createPuzzle(mode) {
             _createPuzzle();
-            //console.log('_createPuzzle', board);
             createEmptySquares(configs.totalSquares - mode);
-            //createEmptySquares(4);
-            //console.log('createEmptySquares', board);
             $rootScope.$broadcast(configs.events.boardUpdate);
         }
 

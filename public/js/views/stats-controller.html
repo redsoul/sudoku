@@ -1,5 +1,10 @@
 <div class="stats-container">
-    <div ng-if="legalNumber!=0" ng-repeat="(legalNumber, count) in legalNumbersCounter track by $index" class="legal-number-wrapper">
+    <div ng-if="legalNumber!=0"
+         ng-repeat="(legalNumber, count) in legalNumbersCounter track by $index"
+         ng-class="{
+            'full-number': count==9
+         }"
+         class="legal-number-wrapper">
         <div class="legal-number">{{legalNumber}}</div>
         <div class="legal-number-count">{{count}}</div>
     </div>

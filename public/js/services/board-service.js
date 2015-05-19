@@ -12,8 +12,6 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
             hintBoard = SolverService.getBoard();
             createPuzzle();
             printBoard(hintBoard);
-            //console.log('initBoard', hintBoard);
-
         }
 
         function getHintBoard() {
@@ -72,7 +70,6 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
                     }
                 }
             }
-            //console.log(configs.events.boardUpdate, legalNumbersCounter);
         });
 
         return {

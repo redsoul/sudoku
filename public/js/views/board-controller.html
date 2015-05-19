@@ -11,7 +11,7 @@
             'selected': isSelected($parent.$index, $index)
             }"
           ng-click="selectSquare($parent.$index, $index)"
-          ng-bind-template="{{square}}">
+          ng-bind-template="{{(square != null) ? square : userBoard[$parent.$index][$index]}}">
         </span>
     </div>
 </div>

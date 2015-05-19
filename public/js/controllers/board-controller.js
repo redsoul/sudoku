@@ -10,7 +10,6 @@ angular.module('Sudoku').controller('BoardController', ['$scope', '$rootScope', 
             $rootScope.loggingEnabled = false;
             $scope.hintBoard = BoardService.getHintBoard();
             $scope.userBoard = angular.array2D(9, 9);
-            //console.log('init', $scope.hintBoard);
         }
 
         init();
