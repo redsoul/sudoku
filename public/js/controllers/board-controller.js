@@ -9,18 +9,18 @@ angular.module('Sudoku').controller('BoardController', ['$scope', '$rootScope', 
             BoardService.initBoard();
             $rootScope.loggingEnabled = false;
             $scope.hintBoard = BoardService.getHintBoard();
-            $scope.userBoard = angular.array2D(9, 9);
+            $scope.userBoard = BoardService.getUserBoard();
         }
 
         init();
 
         $scope.isSelected = function (row, column) {
-            return angular.isUndefined($scope.hintBoard[row][column]) && selected[0] === row && selected[1] === column;
+            var selectedSquare = BoardService.getSelectSquare();
+            return angular.isUndefined($scope.hintBoard[row][column]) && selectedSquare[0] === row && selectedSquare[1] === column;
         };
 
         $scope.selectSquare = function (row, column) {
-            selected[0] = row;
-            selected[1] = column;
+            BoardService.setSelectSquare(row, column);
         }
     }
 ]);

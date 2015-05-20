@@ -88,7 +88,7 @@ angular.module('Sudoku').factory('SolverService', ['$rootScope',
         }
 
         function _random(min, max) {
-            if(min === null){
+            if (min === null) {
                 throw "_random - required min parameter";
             }
             if (angular.isUndefined(max)) {
@@ -111,10 +111,6 @@ angular.module('Sudoku').factory('SolverService', ['$rootScope',
 
         function _randNumber() {
             return legalNumbers.pop();
-        }
-
-        function setBoardValue(row, column, value) {
-            board[row][column] = value
         }
 
         function getEmptySquares(targetBoard) {
@@ -203,16 +199,11 @@ angular.module('Sudoku').factory('SolverService', ['$rootScope',
             for (index = 0; index < num;) {
                 row = _random(0, 8);
                 column = _random(0, 8);
-                console.log(index, row, column, board[row][column]);
                 if (!angular.isUndefined(board[row][column])) {
                     board[row][column] = undefined;
                     index++;
                 }
-                else{
-                    debugger;
-                }
             }
-            console.log('--------------------');
         }
 
         function createPuzzle(mode) {
@@ -225,10 +216,9 @@ angular.module('Sudoku').factory('SolverService', ['$rootScope',
 
         return {
             init: init,
-            setBoard: function(_board){
+            setBoard: function (_board) {
                 board = _board;
             },
-            setBoardValue: setBoardValue,
             checkRow: checkRow,
             checkColumn: checkColumn,
             checkSection: checkSection,

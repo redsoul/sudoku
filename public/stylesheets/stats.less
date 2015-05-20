@@ -1,0 +1,39 @@
+.stats-wrapper {
+  width: 150px;
+  display: table-cell;
+  vertical-align: top;
+
+  .stats-container {
+    margin: 0px 0px 0px 50px;
+
+    .legal-number-wrapper {
+      display: inline-block;
+      width: 52px;
+      height: 52px;
+      border: 2px solid black;
+      position: relative;
+      margin: 5px 0px;
+
+      &:first-child {
+        margin: 0px;
+      }
+
+      &.full-number {
+        background: #cccccc;
+      }
+
+      .legal-number {
+        font-size: 20px;
+        text-align: center;
+        line-height: 52px;
+      }
+
+      .legal-number-count {
+        font-size: 13px;
+        position: absolute;
+        top: 2px;
+        right: 2px;
+      }
+    }
+  }
+}

@@ -6,6 +6,7 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
         var hintBoard;
         var userBoard;
         var legalNumbersCounter = [];
+        var selectedSquare = [];
 
         function initBoard() {
             userBoard = angular.array2D(9, 9);
@@ -54,6 +55,20 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
             hintBoard = SolverService.getBoard();
         }
 
+        function setSelectSquare(row, column) {
+            selectedSquare[0] = row;
+            selectedSquare[1] = column;
+        }
+
+        function getSelectSquare() {
+            return selectedSquare;
+        }
+
+        function setBoardValue(row, column, value) {
+            userBoard[row][column] = value;
+            $rootScope.$broadcast(configs.events.boardUpdate);
+        }
+
         $rootScope.$on(configs.events.boardUpdate, function () {
             var indexR;
             var indexC;
@@ -77,6 +92,9 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
             printBoard: printBoard,
             getHintBoard: getHintBoard,
             getUserBoard: getUserBoard,
+            setSelectSquare: setSelectSquare,
+            getSelectSquare: getSelectSquare,
+            setBoardValue: setBoardValue,
             getLegalNumbersCounter: function () {
                 return legalNumbersCounter;
             }
