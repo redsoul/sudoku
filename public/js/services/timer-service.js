@@ -32,7 +32,6 @@ angular.module('Sudoku').factory('TimerService', ['$rootScope', '$timeout',
         }
 
         function timer() {
-            debugger;
             t = $timeout(add, 1000);
         }
 

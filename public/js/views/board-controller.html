@@ -8,7 +8,9 @@
             'square-border-horizontal-left': $parent.$index%3==0,
             'square-border-horizontal-right': $parent.$index%3==2,
             'hint-square': square != null,
-            'selected': isSelected($parent.$index, $index)
+            'selected': isSelected($parent.$index, $index),
+            'highlighted': isHighlighted($parent.$index, $index),
+            'number-highlighted': isNumberHighlighted($parent.$index, $index)
             }"
           ng-click="selectSquare($parent.$index, $index)"
           ng-bind-template="{{(square != null) ? square : userBoard[$parent.$index][$index]}}">

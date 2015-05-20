@@ -7,6 +7,8 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
         var userBoard;
         var legalNumbersCounter = [];
         var selectedSquare = [];
+        var highlightBoard = angular.array2D(9, 9);
+        var numberHighlightBoard = angular.array2D(9, 9);
 
         function initBoard() {
             userBoard = angular.array2D(9, 9);
@@ -55,18 +57,83 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
             hintBoard = SolverService.getBoard();
         }
 
-        function setSelectSquare(row, column) {
+        function setSelectedSquare(row, column) {
             selectedSquare[0] = row;
             selectedSquare[1] = column;
+
+            clearHighlightBoards();
+            highlightRow(row);
+            highlightColumn(column);
+            highlight3x3square(row, column);
+
+            if (!angular.isUndefined(hintBoard[row][column])) {
+                highlightNumbers(hintBoard[row][column]);
+            }
         }
 
-        function getSelectSquare() {
+        function getSelectedSquare() {
             return selectedSquare;
         }
 
         function setBoardValue(row, column, value) {
             userBoard[row][column] = value;
             $rootScope.$broadcast(configs.events.boardUpdate);
+        }
+
+        function clearHighlightBoards() {
+            highlightBoard = angular.array2D(9, 9);
+            numberHighlightBoard = angular.array2D(9, 9);
+        }
+
+        function highlightRow(row) {
+            var index;
+            for (index = 0; index < 9; index++) {
+                highlightBoard[row][index] = 1;
+            }
+        }
+
+        function highlightColumn(column) {
+            var index;
+            for (index = 0; index < 9; index++) {
+                highlightBoard[index][column] = 1;
+            }
+        }
+
+        function highlight3x3square(row, column) {
+            var indexR;
+            var indexC;
+            var squareSize = 3;
+            var columnCorner = 0;
+            var rowCorner = 0;
+
+            // Find the left-most column
+            while (column >= columnCorner + squareSize) {
+                columnCorner += squareSize;
+            }
+
+            // Find the upper-most row
+            while (row >= rowCorner + squareSize) {
+                rowCorner += squareSize;
+            }
+
+            for (indexR = rowCorner; indexR < rowCorner + squareSize; indexR++) {
+                for (indexC = columnCorner; indexC < columnCorner + squareSize; indexC++) {
+                    highlightBoard[indexR][indexC] = 1;
+                }
+            }
+        }
+
+        function highlightNumbers(number) {
+            var indexR;
+            var indexC;
+
+            for (indexR = 0; indexR < 9; indexR++) {
+                for (indexC = 0; indexC < 9; indexC++) {
+                    if (hintBoard[indexR][indexC] === number) {
+                        numberHighlightBoard[indexR][indexC] = 1;
+                    }
+                }
+            }
         }
 
         $rootScope.$on(configs.events.boardUpdate, function () {
@@ -92,11 +159,22 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
             printBoard: printBoard,
             getHintBoard: getHintBoard,
             getUserBoard: getUserBoard,
-            setSelectSquare: setSelectSquare,
-            getSelectSquare: getSelectSquare,
+            setSelectedSquare: setSelectedSquare,
+            getSelectedSquare: getSelectedSquare,
             setBoardValue: setBoardValue,
+            clearHighlightBoards: clearHighlightBoards,
+            highlightRow: highlightRow,
+            highlightColumn: highlightColumn,
+            highlight3x3square: highlight3x3square,
+            highlightNumbers: highlightNumbers,
             getLegalNumbersCounter: function () {
                 return legalNumbersCounter;
+            },
+            getHighlightBoard: function () {
+                return highlightBoard;
+            },
+            getNumberHighlightBoard: function () {
+                return numberHighlightBoard;
             }
         };
     }

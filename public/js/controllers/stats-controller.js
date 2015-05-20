@@ -11,7 +11,5 @@ angular.module('Sudoku').controller('StatsController', ['$scope', '$rootScope', 
                 BoardService.setBoardValue(selectedSquare[0], selectedSquare[1], number);
             }
         };
-
-        BoardService.setSelectSquare(0, 0);
     }
 ]);
