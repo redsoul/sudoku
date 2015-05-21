@@ -9,7 +9,8 @@ angular.module('Sudoku').controller('BoardController', ['$scope', '$rootScope', 
             $scope.hintBoard = BoardService.getHintBoard();
             $scope.userBoard = BoardService.getUserBoard();
             $scope.highlightBoard = BoardService.getHighlightBoard();
-            $scope.numberHighlightBoard = BoardService.getNumberHighlightBoard();
+            $scope.sameNumbersHighlightBoard = BoardService.getSameNumbersHighlightBoard();
+            $scope.invalidNumbersHighlightBoard = BoardService.getInvalidNumbersHighlightBoard();
 
             $scope.selectSquare(0, 0);
         }
@@ -20,18 +21,30 @@ angular.module('Sudoku').controller('BoardController', ['$scope', '$rootScope', 
         };
 
         $scope.isHighlighted = function (row, column) {
-            return $scope.highlightBoard[row][column] === 1 && angular.isUndefined($scope.hintBoard[row][column]);
+            return $scope.highlightBoard[row][column] === 1 && angular.isUndefined($scope.hintBoard[row][column]) &&
+                angular.isUndefined($scope.userBoard[row][column]);
         };
 
         $scope.isNumberHighlighted = function (row, column) {
-            return $scope.numberHighlightBoard[row][column] === 1;
+            return $scope.sameNumbersHighlightBoard[row][column] === 2;
+        };
+
+        $scope.isInvalidNumberHighlighted = function (row, column) {
+            return $scope.invalidNumbersHighlightBoard[row][column] === 3;
         };
 
         $scope.selectSquare = function (row, column) {
             BoardService.setSelectedSquare(row, column);
             $scope.highlightBoard = BoardService.getHighlightBoard();
-            $scope.numberHighlightBoard = BoardService.getNumberHighlightBoard();
+            $scope.sameNumbersHighlightBoard = BoardService.getSameNumbersHighlightBoard();
+            $scope.invalidNumbersHighlightBoard = BoardService.getInvalidNumbersHighlightBoard();
         };
+
+        $rootScope.$on(configs.events.highlightBoardUpdate, function () {
+            $scope.highlightBoard = BoardService.getHighlightBoard();
+            $scope.sameNumbersHighlightBoard = BoardService.getSameNumbersHighlightBoard();
+            $scope.invalidNumbersHighlightBoard = BoardService.getInvalidNumbersHighlightBoard();
+        });
 
         init();
     }

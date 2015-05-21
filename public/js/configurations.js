@@ -12,7 +12,13 @@ var configs = (function () {
             extreme: 26
         },
         events: {
-            boardUpdate: 'boardUpdate'
+            boardUpdate: 'boardUpdate',
+            highlightBoardUpdate: 'highlightBoardUpdate'
+        },
+        highlights: {
+            sameRowColumnAndSquare: 1,
+            sameNumber: 2,
+            invalidNumber: 3
         }
     };
 }());
