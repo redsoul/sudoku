@@ -11,11 +11,15 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
         var sameNumbersHighlightBoard = angular.array2D(9, 9);
         var invalidNumbersHighlightBoard = angular.array2D(9, 9);
 
-        function initBoard() {
-            userBoard = angular.array2D(9, 9);
+        function initBoard(mode){
             hintBoard = SolverService.getBoard();
-            createPuzzle();
+            userBoard = angular.array2D(9, 9);
+            createPuzzle(mode);
             printBoard(hintBoard);
+
+            invalidNumbersHighlightBoard = angular.array2D(9, 9);
+            sameNumbersHighlightBoard = angular.array2D(9, 9);
+            highlightBoard = angular.array2D(9, 9);
         }
 
         function getHintBoard() {
@@ -53,14 +57,16 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
             console.log(line);
         }
 
-        function createPuzzle() {
-            SolverService.createPuzzle(configs.gameMode.medium);
+        function createPuzzle(mode) {
+            SolverService.createPuzzle(mode);
             hintBoard = SolverService.getBoard();
         }
 
         function setSelectedSquare(row, column) {
             selectedSquare[0] = row;
             selectedSquare[1] = column;
+
+            invalidNumbersHighlightBoard = angular.array2D(9, 9);
 
             highlight(row, column);
         }
@@ -82,8 +88,8 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
             if (!angular.isUndefined(number)) {
                 for (indexR = 0; indexR < 9; indexR++) {
                     for (indexC = 0; indexC < 9; indexC++) {
-                        if (board[indexR][indexC] === number) {
-                            sameNumbersHighlightBoard[indexR][indexC] = configs.highlights.sameNumber;
+                        if (hintBoard[indexR][indexC] === number || userBoard[indexR][indexC] === number) {
+                            sameNumbersHighlightBoard[indexR][indexC] = 1;
                         }
                     }
                 }
@@ -106,12 +112,12 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
 
             //highlight same row
             for (index = 0; index < 9; index++) {
-                highlightBoard[row][index] = configs.highlights.sameRowColumnAndSquare;
+                highlightBoard[row][index] = 1;
             }
 
             //highlight same column
             for (index = 0; index < 9; index++) {
-                highlightBoard[index][column] = configs.highlights.sameRowColumnAndSquare;
+                highlightBoard[index][column] = 1;
             }
 
 
@@ -129,10 +135,10 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
 
             for (indexR = rowCorner; indexR < rowCorner + squareSize; indexR++) {
                 for (indexC = columnCorner; indexC < columnCorner + squareSize; indexC++) {
-                    highlightBoard[indexR][indexC] = configs.highlights.sameRowColumnAndSquare;
+                    highlightBoard[indexR][indexC] = 1;
                 }
             }
-debugger;
+
             //highlight same numbers
             _highlightSameNumber(hintBoard, row, column);
             _highlightSameNumber(userBoard, row, column);
@@ -144,20 +150,21 @@ debugger;
             var squareSize = 3;
             var columnCorner = 0;
             var rowCorner = 0;
+            var valid = true;
 
             invalidNumbersHighlightBoard = angular.array2D(9, 9);
 
             for (indexC = 0; indexC < 9; indexC++) {
                 if (hintBoard[row][indexC] === number || userBoard[row][indexC] === number) {
-                    invalidNumbersHighlightBoard[row][indexC] = 3;
-                    return false;
+                    invalidNumbersHighlightBoard[row][indexC] = 1;
+                    valid = false;
                 }
             }
 
             for (indexR = 0; indexR < 9; indexR++) {
                 if (hintBoard[indexR][column] === number || userBoard[indexR][column] === number) {
-                    invalidNumbersHighlightBoard[indexR][column] = 3;
-                    return false;
+                    invalidNumbersHighlightBoard[indexR][column] = 1;
+                    valid = false;
                 }
             }
 
@@ -174,13 +181,13 @@ debugger;
             for (indexR = rowCorner; indexR < rowCorner + squareSize; indexR++) {
                 for (indexC = columnCorner; indexC < columnCorner + squareSize; indexC++) {
                     if (hintBoard[indexR][indexC] === number || userBoard[indexR][indexC] === number) {
-                        invalidNumbersHighlightBoard[indexR][indexC] = configs.highlights.invalidNumber;
-                        return false;
+                        invalidNumbersHighlightBoard[indexR][indexC] = 1;
+                        valid = false;
                     }
                 }
             }
 
-            return true;
+            return valid;
         }
 
         function fillSquare(number) {
@@ -206,7 +213,7 @@ debugger;
 
             for (indexR = 0; indexR < hintBoard.length; indexR++) {
                 for (indexC = 0; indexC < hintBoard[indexR].length; indexC++) {
-                    if (angular.isNumber(hintBoard[indexR][indexC])) {
+                    if (angular.isNumber(hintBoard[indexR][indexC]) || angular.isNumber(userBoard[indexR][indexC])) {
                         legalNumbersCounter[hintBoard[indexR][indexC]]++;
                     }
                 }

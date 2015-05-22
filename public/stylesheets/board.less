@@ -1,52 +1,45 @@
 
-.game-container {
-  display: table;
-  margin: 0px auto;
+.board-wrapper {
+  width: 576px;
+  margin: 0px 20px;
+  display: table-cell;
 
-  .board-row {
-    display: table-row;
-
-    .board-wrapper {
-      width: 576px;
-      margin: 0px 20px;
-      display: table-cell;
-
-      .square {
-        border: 2px solid #cccccc;
-        width: 60px;
-        height: 60px;
-        float: left;
-        line-height: 60px;
-        font-size: 30px;
-        text-align: center;
-      }
-      .hint-square {
-        background-color: #aaaaaa;
-      }
-      .square-border-vertical-left {
-        border-left: 2px solid black;
-      }
-      .square-border-vertical-right {
-        border-right: 2px solid black;
-      }
-      .square-border-horizontal-left {
-        border-top: 2px solid black;
-      }
-      .square-border-horizontal-right {
-        border-bottom: 2px solid black;
-      }
-      .selected {
-        border: 2px solid black;
-      }
-      .highlighted {
-        background-color: lightyellow;
-      }
-      .number-highlighted {
-        background-color: lightblue;
-      }
-      .invalid-number-highlighted {
-        border: 2px solid red;
-      }
-    }
+  .square {
+    border: 2px solid #cccccc;
+    width: 60px;
+    height: 60px;
+    float: left;
+    line-height: 60px;
+    font-size: 30px;
+    text-align: center;
+  }
+  .hint-square {
+    background-color: #aaaaaa;
+  }
+  .square-border-vertical-left {
+    border-left: 2px solid black;
+  }
+  .square-border-vertical-right {
+    border-right: 2px solid black;
+  }
+  .square-border-horizontal-left {
+    border-top: 2px solid black;
+  }
+  .square-border-horizontal-right {
+    border-bottom: 2px solid black;
+  }
+  .selected {
+    border: 2px solid blue;
+  }
+  .highlighted {
+    background-color: lightyellow;
+  }
+  .number-highlighted {
+    background-color: lightblue;
+  }
+  .invalid-number-highlighted {
+    border: 2px solid red;
+    color: red;
+    font-weight: bold;
   }
 }

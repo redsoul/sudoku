@@ -14,11 +14,6 @@ var configs = (function () {
         events: {
             boardUpdate: 'boardUpdate',
             highlightBoardUpdate: 'highlightBoardUpdate'
-        },
-        highlights: {
-            sameRowColumnAndSquare: 1,
-            sameNumber: 2,
-            invalidNumber: 3
         }
     };
 }());

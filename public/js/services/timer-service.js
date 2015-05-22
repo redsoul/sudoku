@@ -35,11 +35,20 @@ angular.module('Sudoku').factory('TimerService', ['$rootScope', '$timeout',
             t = $timeout(add, 1000);
         }
 
+        function stop() {
+            if (t) {
+                $timeout.cancel(t);
+            }
+        }
+
         return {
             start: timer,
-            stop: function () {
-                $timeout.cancel(t);
-            },
-            clear: clear
+            stop: stop,
+            clear: clear,
+            reset: function () {
+                stop();
+                clear();
+                timer();
+            }
         }
     }]);

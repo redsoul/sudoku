@@ -4,7 +4,11 @@ angular.module('Sudoku').controller('BoardController', ['$scope', '$rootScope', 
         'use strict';
 
         function init() {
-            BoardService.initBoard();
+            BoardService.initBoard(configs.gameMode.medium);
+            resetBoard();
+        }
+
+        function resetBoard(){
             $rootScope.loggingEnabled = false;
             $scope.hintBoard = BoardService.getHintBoard();
             $scope.userBoard = BoardService.getUserBoard();
@@ -21,16 +25,16 @@ angular.module('Sudoku').controller('BoardController', ['$scope', '$rootScope', 
         };
 
         $scope.isHighlighted = function (row, column) {
-            return $scope.highlightBoard[row][column] === 1 && angular.isUndefined($scope.hintBoard[row][column]) &&
-                angular.isUndefined($scope.userBoard[row][column]);
+            return $scope.highlightBoard[row][column] === 1 &&
+                angular.isUndefined($scope.hintBoard[row][column]);
         };
 
         $scope.isNumberHighlighted = function (row, column) {
-            return $scope.sameNumbersHighlightBoard[row][column] === 2;
+            return $scope.sameNumbersHighlightBoard[row][column] === 1;
         };
 
         $scope.isInvalidNumberHighlighted = function (row, column) {
-            return $scope.invalidNumbersHighlightBoard[row][column] === 3;
+            return $scope.invalidNumbersHighlightBoard[row][column] === 1;
         };
 
         $scope.selectSquare = function (row, column) {
@@ -39,6 +43,10 @@ angular.module('Sudoku').controller('BoardController', ['$scope', '$rootScope', 
             $scope.sameNumbersHighlightBoard = BoardService.getSameNumbersHighlightBoard();
             $scope.invalidNumbersHighlightBoard = BoardService.getInvalidNumbersHighlightBoard();
         };
+
+        $rootScope.$on(configs.events.boardUpdate, function () {
+            resetBoard();
+        });
 
         $rootScope.$on(configs.events.highlightBoardUpdate, function () {
             $scope.highlightBoard = BoardService.getHighlightBoard();

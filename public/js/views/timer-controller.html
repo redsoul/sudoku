@@ -1,1 +1,7 @@
-<div class="timer-container" ng-bind-template="{{timeString}}"></div>
+<div ng-controller="TimerController" class="timer-wrapper">
+    <div class="timer-container">
+        <label for="toggle-menu" class="toggle-menu-icon"></label>
+
+        <span class="stop-watch" ng-bind-template="{{timeString}}"></span>
+    </div>
+</div>

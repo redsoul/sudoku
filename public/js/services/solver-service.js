@@ -141,6 +141,8 @@ angular.module('Sudoku').factory('SolverService', ['$rootScope',
             var row;
             var column;
 
+            board = angular.array2D(9, 9);
+
             //fill the first column
             _shuffleValues();
             for (row = 0; row < board.length; row++) {

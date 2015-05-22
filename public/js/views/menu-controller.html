@@ -1,0 +1,7 @@
+<div ng-controller="MenuController" class="menu-wrapper">
+    <ul class="menu-items">
+        <li class="menu-item" ng-repeat="item in items" ng-click="item[1]()">
+            <a ng-bind-template="{{item[0]}}"></a>
+        </li>
+    </ul>
+</div>
