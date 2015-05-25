@@ -8,7 +8,10 @@ angular.module('Sudoku').controller('MenuController', ['$scope', '$rootScope', '
             TimerService.reset();
         }
 
-        function getHint(){}
+        function getHint(){
+            debugger;
+            BoardService.getHint();
+        }
 
         $scope.items = [
             ['New Game', newGame],

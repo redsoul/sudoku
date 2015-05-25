@@ -5,7 +5,6 @@ angular.module('Sudoku').controller('BoardController', ['$scope', '$rootScope', 
 
         function init() {
             BoardService.initBoard(configs.gameMode.medium);
-            resetBoard();
         }
 
         function resetBoard(){

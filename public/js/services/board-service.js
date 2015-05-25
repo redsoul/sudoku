@@ -5,13 +5,14 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
 
         var hintBoard;
         var userBoard;
+        var board = angular.array2D(9, 9);
         var legalNumbersCounter = [];
         var selectedSquare = [];
         var highlightBoard = angular.array2D(9, 9);
         var sameNumbersHighlightBoard = angular.array2D(9, 9);
         var invalidNumbersHighlightBoard = angular.array2D(9, 9);
 
-        function initBoard(mode){
+        function initBoard(mode) {
             hintBoard = SolverService.getBoard();
             userBoard = angular.array2D(9, 9);
             createPuzzle(mode);
@@ -28,6 +29,10 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
 
         function getUserBoard() {
             return userBoard;
+        }
+
+        function getBoard() {
+            return board;
         }
 
         function printBoard(board) {
@@ -60,6 +65,8 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
         function createPuzzle(mode) {
             SolverService.createPuzzle(mode);
             hintBoard = SolverService.getBoard();
+            board = hintBoard;
+            $rootScope.$broadcast(configs.events.boardUpdate);
         }
 
         function setSelectedSquare(row, column) {
@@ -77,6 +84,7 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
 
         function _setBoardValue(row, column, value) {
             userBoard[row][column] = value;
+            board[row][column] = value;
             $rootScope.$broadcast(configs.events.boardUpdate);
         }
 
@@ -202,29 +210,28 @@ angular.module('Sudoku').factory('BoardService', ['$rootScope', 'SolverService',
             }
         }
 
-        $rootScope.$on(configs.events.boardUpdate, function () {
-            var indexR;
-            var indexC;
-            var index;
+        function getHint() {
+            var found = false;
+            var hint;
 
-            for (index = 0; index < configs.legalNumbers.length; index++) {
-                legalNumbersCounter[configs.legalNumbers[index]] = 0;
-            }
-
-            for (indexR = 0; indexR < hintBoard.length; indexR++) {
-                for (indexC = 0; indexC < hintBoard[indexR].length; indexC++) {
-                    if (angular.isNumber(hintBoard[indexR][indexC]) || angular.isNumber(userBoard[indexR][indexC])) {
-                        legalNumbersCounter[hintBoard[indexR][indexC]]++;
-                    }
+            while (!found) {
+                hint = SolverService.getHint();
+                if (angular.isUndefined(board[hint[0]][hint[1]])) {
+                    _setBoardValue(hint[0], hint[1], hint[2]);
+                    setSelectedSquare(hint[0], hint[1]);
+                    $rootScope.$broadcast(configs.events.highlightBoardUpdate);
+                    found = true;
                 }
             }
-        });
+        }
 
         return {
             initBoard: initBoard,
             printBoard: printBoard,
             getHintBoard: getHintBoard,
             getUserBoard: getUserBoard,
+            getBoard: getBoard,
+            getHint: getHint,
             setSelectedSquare: setSelectedSquare,
             getSelectedSquare: getSelectedSquare,
             setBoardValue: _setBoardValue,

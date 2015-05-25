@@ -5,10 +5,12 @@ angular.module('Sudoku').factory('SolverService', ['$rootScope',
         'use strict';
 
         var board;
+        var negativeBoard;
         var legalNumbers;
 
         function init() {
             board = angular.array2D(9, 9);
+            negativeBoard = angular.array2D(9, 9);
             initLegalNumbers();
         }
 
@@ -202,6 +204,7 @@ angular.module('Sudoku').factory('SolverService', ['$rootScope',
                 row = _random(0, 8);
                 column = _random(0, 8);
                 if (!angular.isUndefined(board[row][column])) {
+                    negativeBoard[row][column] = board[row][column];
                     board[row][column] = undefined;
                     index++;
                 }
@@ -211,16 +214,29 @@ angular.module('Sudoku').factory('SolverService', ['$rootScope',
         function createPuzzle(mode) {
             _createPuzzle();
             createEmptySquares(configs.totalSquares - mode);
-            $rootScope.$broadcast(configs.events.boardUpdate);
+        }
+
+        function getHint() {
+            var row;
+            var column;
+            var found = false;
+
+            while (!found) {
+                row = _random(0, 8);
+                column = _random(0, 8);
+                if (!angular.isUndefined(negativeBoard[row][column])) {
+                    found = true;
+                }
+            }
+
+            return [row, column, negativeBoard[row][column]];
         }
 
         init();
 
         return {
             init: init,
-            setBoard: function (_board) {
-                board = _board;
-            },
+            getHint: getHint,
             checkRow: checkRow,
             checkColumn: checkColumn,
             checkSection: checkSection,
